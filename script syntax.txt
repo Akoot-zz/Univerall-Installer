@@ -1,0 +1,21 @@
+To use a stored variable, use {} to reference them (case sensitive)
+Example:
+
+ask y/n "Yes or no?" for answer
+say "You said: {answer}"
+
+this stores a new variable called "answer" with the value the user types
+Since it's a yes or no question (y/n) any answer given starting with 'Y' will be TRUE, anything else and it's FALSE
+
+download {URL} into {FOLDER|FILE}
+run {BATCH COMMAND}
+execute {SYSTEM COMMAND}
+say {MESSAGE}
+ask [y/n] {MESSAGE} for {VARIABLE}
+move|copy {FILE(s)|everything} from {FOLDER} into {FOLDER}
+save {VAR(s)|everything} to {FILE}
+open {FILE}
+browse {DIRECTORY}
+if {VARIABLE} is [not] {TRUE|FALSE|OBJECT} then {COMMAND}
+- if readEula is true then move everything from bin into C:\ProgramFiles\MyProgram\bin
+- if accepted is not true then ask "Why haven't you accepted yet"

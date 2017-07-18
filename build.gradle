@@ -1,0 +1,48 @@
+buildscript {
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "gradle.plugin.edu.sc.seis.gradle:launch4j:2.3.0"
+	}
+}
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: "edu.sc.seis.launch4j"
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+dependencies {
+	compile group: 'com.Akoot', name: 'Akoot-Util', version: '0.1.2a'
+}
+
+task fatJar(type: Jar) {
+	manifest {
+		attributes 'Main-Class': project.mainClassName
+	}
+	baseName = project.name
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	with jar
+}
+
+task deploy(type: Copy, dependsOn: 'createExe') {
+	from "${buildDir}/launch4j"
+	into "${project.deployDir}"
+	include('*.exe')
+}
+
+createExe {
+	mainClassName = project.mainClassName
+	copyConfigurable = project.tasks.fatJar.outputs.files
+	jar = "lib/${project.tasks.fatJar.archiveName}"
+	//icon = "${projectDir}/assets/icons/1.ico"
+	outfile = "${project.exeFile}.exe"
+	headerType = 'console'
+}
