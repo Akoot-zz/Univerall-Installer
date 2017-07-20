@@ -123,31 +123,27 @@ public class Installer
 		/* Ask */
 		else if(cmd.equals("ask"))
 		{
-			String question = "";
-			boolean yesNo = false;
-			String key = options.getArgFor("for");
-
-			if(options.get(0).equalsIgnoreCase("y/n"))
-			{
-				question = options.get(1);
-				yesNo = true;
-			}
-			else
-			{
-				question = options.get(0);
-				yesNo = false;
-			}
+			String question = options.get(0);
+			boolean yesNo = options.has("to");
 
 			System.out.print(question + " ");
 			String answer = System.console().readLine();
 
 			if(yesNo)
 			{
-				objects.put(key, answer.toLowerCase().startsWith("y"));
+				boolean not = options.getArgFor("to").equalsIgnoreCase("not");
+				if(answer.toLowerCase().startsWith("y"))
+				{
+					if(!not) parse(options.getArgFor("to"));
+				}
+				else
+				{
+					if(not) parse(options.getArgFor("not"));
+				}
 			}
 			else
 			{
-				objects.put(key, answer);
+				objects.put(options.getArgFor("for"), answer);
 			}
 		}
 
