@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-	compile group: 'com.Akoot', name: 'Akoot-Util', version: '0.1.2a'
+	compile group: 'com.Akoot', name: 'Akoot-Util', version: project.property('util-version')
 }
 
 task fatJar(type: Jar) {

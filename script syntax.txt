@@ -1,3 +1,8 @@
+To store a variable, use REMEMBER
+Example:
+remember, path is "C:\path\to\file"
+remember name is MyProgram
+
 To use a stored variable, use {} to reference them (case sensitive)
 Example:
 
@@ -6,16 +11,53 @@ say "You said: {answer}"
 
 this stores a new variable called "answer" with the value the user types
 Since it's a yes or no question (y/n) any answer given starting with 'Y' will be TRUE, anything else and it's FALSE
+if y/n wasn't put in, the variable will be stored as is
 
-download {URL} into {FOLDER|FILE}
-run {BATCH COMMAND}
-execute {SYSTEM COMMAND}
+To check if a variable is something, use {} to reference them using IF
+Example:
+if {answer} is true then download http://somesite.io/program/to/download.exe
+
+if {name} is Akoot then say "Hey, that's my name!"
+
+download {URL} into {FOLDER|FILE} [loudly]
+run {SYSTEM COMMAND}
 say {MESSAGE}
 ask [y/n] {MESSAGE} for {VARIABLE}
-move|copy {FILE(s)|everything} from {FOLDER} into {FOLDER}
+move|copy {FILE(s)|everything} from {FOLDER} into {FOLDER} [loudly]
 save {VAR(s)|everything} to {FILE}
-open {FILE}
-browse {DIRECTORY}
+open {FILE|URL|DIRECTORY}
 if {VARIABLE} is [not] {TRUE|FALSE|OBJECT} then {COMMAND}
-- if readEula is true then move everything from bin into C:\ProgramFiles\MyProgram\bin
-- if accepted is not true then ask "Why haven't you accepted yet"
+wait [NUMBER] [seconds|milliseconds]
+delete {FILE|FOLDER} [loudly]
+remember {VARIABLE} is {VALUE}
+
+Examples:
+download http://somesite.io/repo/thing.exe into %user.home%
+
+run path\to\someprogram.exe -arg1 -arg2 --arg3
+
+say "Hello World!" "This is a new line!"
+
+ask "Would you like to delete system32?" for delete
+if {delete} is true then delete C:\Windows\System32
+
+ask "What is your name?" for name
+say "Hello, {name}!"
+
+open http://google.com
+open %user.home%\Desktop
+open README.txt
+
+remember, installDir is "C:\Program Files\Program"
+
+say "Installing bin..."
+move everything from bin into {installDir}
+delete bin
+
+save installdata.txt
+move installdata.txt from here into {installDir} loudly
+
+wait 10 seconds
+wait 500 milliseconds
+wait 1 second
+wait

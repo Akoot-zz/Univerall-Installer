@@ -1,0 +1,2 @@
+ask "What time is it?" for time
+say "It's {time}!"
