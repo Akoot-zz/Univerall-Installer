@@ -43,18 +43,6 @@ public class Installer
 		}
 	}
 
-	private static void print(String s)
-	{
-		if(s.contains("{"))
-		{
-			for(String key: objects.keySet())
-			{
-				s = s.replaceAll("\\{" + key + "\\}", objects.get(key).toString());
-			}
-		}
-		System.out.println(s);
-	}
-
 	private static void parse(String command)
 	{
 		/* Parsing system variables */
@@ -71,6 +59,14 @@ public class Installer
 				if(s.equalsIgnoreCase("%time%")) var = System.currentTimeMillis() + "";
 
 				if(var != null) command = command.replace(s, var);
+			}
+		}
+
+		if(command.contains("{"))
+		{
+			for(String key: objects.keySet())
+			{
+				command = command.replaceAll("\\{" + key + "\\}", objects.get(key).toString());
 			}
 		}
 
@@ -142,7 +138,7 @@ public class Installer
 				yesNo = false;
 			}
 
-			print(question);
+			System.out.print(question + " ");
 			String answer = System.console().readLine();
 
 			if(yesNo)
@@ -160,7 +156,7 @@ public class Installer
 		{
 			for(String s: options.getArgs())
 			{
-				print(s);
+				System.out.println(s);
 			}
 		}
 
@@ -170,9 +166,15 @@ public class Installer
 			String key = options.get(0);
 			String check = options.getArgBefore("then");
 			boolean isBoolean = check.equalsIgnoreCase("true") || check.equalsIgnoreCase("false");
+			boolean isExists = check.equalsIgnoreCase("exists") || (check.equalsIgnoreCase("exist"));
+			boolean notExists = options.getArgBefore("exist").toLowerCase().startsWith("doesn");
 			boolean not = options.getArgFor("is").equalsIgnoreCase("not");
 			boolean got = (objects.get(key) instanceof Boolean ? (Boolean) (objects.get(key)) : false);
 			if((isBoolean && got != not) || (objects.get(key).toString().equals(check)))
+			{
+				parse(command.substring(command.indexOf("then")));
+			}
+			else if(isExists && new File(key).exists() && !notExists)
 			{
 				parse(command.substring(command.indexOf("then")));
 			}
@@ -271,7 +273,7 @@ public class Installer
 				System.console().readLine();
 			}
 		}
-		
+
 		/* Remember */
 		else if(cmd.equals("remember") || cmd.equals("remember,"))
 		{
