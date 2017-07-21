@@ -22,7 +22,8 @@ if {name} is Akoot then say "Hey, that's my name!"
 download {URL} into {FOLDER|FILE} [loudly]
 run {SYSTEM COMMAND}
 say {MESSAGE}
-ask [y/n] {MESSAGE} for {VARIABLE}
+ask {MESSAGE} for{VARIABLE}
+ask {MESSAGE} to [not] {COMMAND}
 move|copy {FILE(s)|everything} from {FOLDER} into {FOLDER} [loudly]
 save {VAR(s)|everything} to {FILE}
 open {FILE|URL|DIRECTORY}
@@ -30,6 +31,7 @@ if {VARIABLE} is [not] {TRUE|FALSE|OBJECT} then {COMMAND}
 wait [NUMBER] [seconds|milliseconds]
 delete {FILE|FOLDER} [loudly]
 remember {VARIABLE} is {VALUE}
+write {LINE} to {FILE} [at line {LINE #}]
 
 Examples:
 download http://somesite.io/repo/thing.exe into %user.home%
@@ -56,6 +58,9 @@ delete bin
 
 save installdata.txt
 move installdata.txt from here into {installDir} loudly
+
+write "hey there person" in hi.txt at line 10
+write "hey there" in hi.txt
 
 wait 10 seconds
 wait 500 milliseconds

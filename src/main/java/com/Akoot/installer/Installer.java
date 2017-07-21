@@ -26,7 +26,7 @@ public class Installer
 
 	public static void main(String[] args)
 	{
-		if(args.length == 0) script = new CthFile("script");
+		if(args.length == 0) script = new CthFile(new File("data"), "script");
 		else new CthFile(args[0]);
 
 		if(script.exists()) install();
@@ -304,6 +304,24 @@ public class Installer
 					System.out.println("Delete: " + file.getAbsolutePath());
 				}
 			}
+		}
+
+		/* Write */
+		else if(cmd.equals("write"))
+		{
+			String newLine = options.get(0);
+			CthFile file = new CthFile(options.getArgFor("in"));
+			file.create();
+			if(options.getArgBefore("line").equalsIgnoreCase("at"))
+			{
+				int lineNumber = Integer.parseInt(options.getArgFor("line"));
+				file.setLine(lineNumber, newLine);
+			}
+			else
+			{
+				file.addLine(newLine);
+			}
+
 		}
 	}
 }
