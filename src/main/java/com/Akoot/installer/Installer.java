@@ -61,7 +61,8 @@ public class Installer
 				if(var != null) command = command.replace(s, var);
 			}
 		}
-
+		
+		/* Parsing variables */
 		if(command.contains("{"))
 		{
 			for(String key: objects.keySet())
@@ -134,11 +135,11 @@ public class Installer
 				boolean not = options.getArgFor("to").equalsIgnoreCase("not");
 				if(answer.toLowerCase().startsWith("y"))
 				{
-					if(!not) parse(options.getArgFor("to"));
+					if(!not) parse(command.substring(command.indexOf("to")));
 				}
 				else
 				{
-					if(not) parse(options.getArgFor("not"));
+					if(not) parse(command.substring(command.indexOf("not")));
 				}
 			}
 			else
