@@ -37,13 +37,14 @@ public class Installer
 	{
 		objects = new HashMap<String, Object>();
 
-		for(String command: script.read())
+		String[] read = script.read();
+		for(int i = 0; i < read.length; i++)
 		{
-			parse(command);
+			parse(read[i], i);
 		}
 	}
 
-	private static void parse(String command)
+	private static void parse(String command, int line)
 	{
 		/* Parsing system variables */
 		if(command.contains("%"))
@@ -61,7 +62,7 @@ public class Installer
 				if(var != null) command = command.replace(s, var);
 			}
 		}
-		
+
 		/* Parsing variables */
 		if(command.contains("{"))
 		{
@@ -135,11 +136,11 @@ public class Installer
 				boolean not = options.getArgFor("to").equalsIgnoreCase("not");
 				if(answer.toLowerCase().startsWith("y"))
 				{
-					if(!not) parse(command.substring(command.indexOf("to")));
+					if(!not) parse(command.substring(command.indexOf("to")), line);
 				}
 				else
 				{
-					if(not) parse(command.substring(command.indexOf("not")));
+					if(not) parse(command.substring(command.indexOf("not")), line);
 				}
 			}
 			else
@@ -157,23 +158,32 @@ public class Installer
 			}
 		}
 
-		/* Logic */
+		/* If */
 		else if(cmd.equals("if"))
 		{
 			String key = options.get(0);
 			String check = options.getArgBefore("then");
-			boolean isBoolean = check.equalsIgnoreCase("true") || check.equalsIgnoreCase("false");
-			boolean isExists = check.equalsIgnoreCase("exists") || (check.equalsIgnoreCase("exist"));
+
+			boolean isExists = check.toLowerCase().startsWith("exist");
 			boolean notExists = options.getArgBefore("exist").toLowerCase().startsWith("doesn");
+
+			boolean isBoolean = check.equalsIgnoreCase("true") || check.equalsIgnoreCase("false");
 			boolean not = options.getArgFor("is").equalsIgnoreCase("not");
 			boolean got = (objects.get(key) instanceof Boolean ? (Boolean) (objects.get(key)) : false);
-			if((isBoolean && got != not) || (objects.get(key).toString().equals(check)))
+
+			if(!isExists)
 			{
-				parse(command.substring(command.indexOf("then")));
+				if(isBoolean && got != not || (objects.get(key) + "").equals(check))
+				{
+					parse(command.substring(command.indexOf("then")), line);
+				}
 			}
-			else if(isExists && new File(key).exists() && !notExists)
+			else
 			{
-				parse(command.substring(command.indexOf("then")));
+				if(new File(key).exists() && !notExists)
+				{
+					parse(command.substring(command.indexOf("then")), line);
+				}
 			}
 		}
 
@@ -198,7 +208,7 @@ public class Installer
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace();
+				System.out.println("Error with line " + line + ": " + e.getMessage());
 			}
 			return;
 		}
@@ -216,7 +226,7 @@ public class Installer
 				}
 				catch (IOException e)
 				{
-					e.printStackTrace();
+					System.out.println("Error with line " + line + ": " + e.getMessage());
 				}
 			}
 			else

@@ -35,7 +35,7 @@ task fatJar(type: Jar) {
 task deploy(type: Copy, dependsOn: 'createExe') {
 	from "${buildDir}/launch4j"
 	into "${project.deployDir}"
-	include('*.exe')
+	//include('*.exe')
 }
 
 createExe {
